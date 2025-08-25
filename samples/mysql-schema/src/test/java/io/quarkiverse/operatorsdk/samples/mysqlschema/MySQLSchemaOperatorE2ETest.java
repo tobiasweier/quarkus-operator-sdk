@@ -66,7 +66,7 @@ class MySQLSchemaOperatorE2ETest {
         client.resource(testSchema).serverSideApply();
 
         log.info("Waiting 10 seconds for expected resources to be created and updated");
-        await().atMost(10, SECONDS).untilAsserted(() -> {
+        await().pollDelay(9, SECONDS).atMost(10, SECONDS).untilAsserted(() -> {
             MySQLSchema updatedSchema = client.resources(MySQLSchema.class)
                     .inNamespace(testSchema.getMetadata().getNamespace())
                     .withName(testSchema.getMetadata().getName()).get();
