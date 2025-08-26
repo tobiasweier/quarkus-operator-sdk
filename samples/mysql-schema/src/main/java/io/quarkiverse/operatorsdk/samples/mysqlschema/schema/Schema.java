@@ -1,7 +1,6 @@
 package io.quarkiverse.operatorsdk.samples.mysqlschema.schema;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class Schema implements Serializable {
 
@@ -21,18 +20,20 @@ public class Schema implements Serializable {
         return characterSet;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Schema schema = (Schema) o;
-        return Objects.equals(name, schema.name) && Objects.equals(characterSet, schema.characterSet);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, characterSet);
-    }
+    /*
+     * @Override
+     * public boolean equals(Object o) {
+     * if (this == o)
+     * return true;
+     * if (o == null || getClass() != o.getClass())
+     * return false;
+     * Schema schema = (Schema) o;
+     * return Objects.equals(name, schema.name) && Objects.equals(characterSet, schema.characterSet);
+     * }
+     *
+     * @Override
+     * public int hashCode() {
+     * return Objects.hash(name, characterSet);
+     * }
+     */
 }

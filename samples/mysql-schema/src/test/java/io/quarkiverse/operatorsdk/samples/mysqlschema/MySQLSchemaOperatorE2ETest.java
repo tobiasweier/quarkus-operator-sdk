@@ -60,7 +60,7 @@ class MySQLSchemaOperatorE2ETest {
                 .withNamespace(client.getNamespace())
                 .build());
         testSchema.setSpec(new SchemaSpec());
-        testSchema.getSpec().setEncoding("utf8");
+        testSchema.getSpec().setEncoding("utf8mb3");
 
         log.infof("Creating test MySQLSchema object: %s", testSchema);
         client.resource(testSchema).serverSideApply();
@@ -77,8 +77,7 @@ class MySQLSchemaOperatorE2ETest {
             assertThat(updatedSchema.getStatus().getUrl(), startsWith("jdbc:mysql://"));
         });
 
-        verify(schemaService, times(1)).createSchemaAndRelatedUser(any(), eq("mydb1"), eq("utf8"), anyString(),
-                anyString());
+        verify(schemaService, times(1)).createSchemaAndRelatedUser(any(), eq("mydb1"), eq("utf8mb3"), anyString(), anyString());
 
         client.resource(testSchema).delete();
 
