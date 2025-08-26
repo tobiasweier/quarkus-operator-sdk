@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ import io.javaoperatorsdk.operator.api.reconciler.Context;
 import io.javaoperatorsdk.operator.api.reconciler.dependent.Deleter;
 import io.javaoperatorsdk.operator.api.reconciler.dependent.managed.ConfiguredDependentResource;
 import io.javaoperatorsdk.operator.processing.dependent.Creator;
+import io.javaoperatorsdk.operator.processing.dependent.Matcher;
 import io.javaoperatorsdk.operator.processing.dependent.external.PerResourcePollingDependentResource;
 import io.quarkiverse.operatorsdk.samples.mysqlschema.MySQLSchema;
 import io.quarkiverse.operatorsdk.samples.mysqlschema.schema.Schema;
@@ -97,6 +99,15 @@ public class SchemaDependentResource
         } catch (SQLException e) {
             throw new RuntimeException("Error while trying read Schema", e);
         }
+    }
+
+    // Overriding match() method in case "domain" class has no equal() method
+    @Override
+    public Matcher.Result<Schema> match(Schema resource, MySQLSchema primary, Context<MySQLSchema> context) {
+        Schema desired = desired(primary, context);
+        boolean matches = Objects.equals(resource.getName(), desired.getName())
+                && Objects.equals(resource.getCharacterSet(), desired.getCharacterSet());
+        return Matcher.Result.computed(matches, desired);
     }
 
     public static String decode(String value) {
